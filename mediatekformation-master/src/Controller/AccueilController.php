@@ -7,35 +7,38 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Description of AccueilController
- *
- * @author emds
+ * Contrôleur de la page d'accueil et des pages informatives
  */
-class AccueilController extends AbstractController{
-    
+class AccueilController extends AbstractController {
+
+    /**
+     * Chemin vers le dossier des templates pages
+     */
+    private const PATH_TEMPLATE = "pages/";
+
     /**
      * @var FormationRepository
      */
     private $repository;
-    
+
     /**
-     * 
+     * Constructeur
      * @param FormationRepository $repository
      */
     public function __construct(FormationRepository $repository) {
         $this->repository = $repository;
-    }   
-    
-    #[Route('/', name: 'accueil')]
-    public function index(): Response{
-        $formations = $this->repository->findAllLasted(2);
-        return $this->render("pages/accueil.html.twig", [
-            'formations' => $formations
-        ]); 
     }
-    
+
+    #[Route('/', name: 'accueil')]
+    public function index(): Response {
+        $formations = $this->repository->findAllLasted(2);
+        return $this->render(self::PATH_TEMPLATE . "accueil.html.twig", [
+            'formations' => $formations
+        ]);
+    }
+
     #[Route('/cgu', name: 'cgu')]
-    public function cgu(): Response{
-        return $this->render("pages/cgu.html.twig"); 
+    public function cgu(): Response {
+        return $this->render(self::PATH_TEMPLATE . "cgu.html.twig");
     }
 }

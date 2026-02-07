@@ -10,31 +10,42 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Description of PlaylistsController
- *
- * @author emds
+ * Controleur des playlists
  */
 class PlaylistsController extends AbstractController {
     
     /**
-     * 
+     * Chemin vers le dossier des templates pages
+     */
+    private const BASE_PATH = "pages/";
+
+    /**
+     * Nom du template de la page des playlists
+     */
+    private const TEMPLATE_PLAYLISTS = "playlists.html.twig";
+    
+    /**
      * @var PlaylistRepository
      */
     private $playlistRepository;
     
     /**
-     * 
      * @var FormationRepository
      */
     private $formationRepository;
     
     /**
-     * 
      * @var CategorieRepository
      */
     private $categorieRepository;    
     
-    function __construct(PlaylistRepository $playlistRepository, 
+    /**
+     * Constructeur
+     * @param PlaylistRepository $playlistRepository
+     * @param CategorieRepository $categorieRepository
+     * @param FormationRepository $formationRespository
+     */
+    public function __construct(PlaylistRepository $playlistRepository, 
             CategorieRepository $categorieRepository,
             FormationRepository $formationRespository) {
         $this->playlistRepository = $playlistRepository;
@@ -42,15 +53,11 @@ class PlaylistsController extends AbstractController {
         $this->formationRepository = $formationRespository;
     }
     
-    /**
-     * @Route("/playlists", name="playlists")
-     * @return Response
-     */
     #[Route('/playlists', name: 'playlists')]
     public function index(): Response{
         $playlists = $this->playlistRepository->findAllOrderByName('ASC');
         $categories = $this->categorieRepository->findAll();
-        return $this->render("pages/playlists.html.twig", [
+        return $this->render(self::BASE_PATH . self::TEMPLATE_PLAYLISTS, [
             'playlists' => $playlists,
             'categories' => $categories            
         ]);
@@ -64,7 +71,7 @@ class PlaylistsController extends AbstractController {
                 break;
         }
         $categories = $this->categorieRepository->findAll();
-        return $this->render("pages/playlists.html.twig", [
+        return $this->render(self::BASE_PATH . self::TEMPLATE_PLAYLISTS, [
             'playlists' => $playlists,
             'categories' => $categories            
         ]);
@@ -75,7 +82,7 @@ class PlaylistsController extends AbstractController {
         $valeur = $request->get("recherche");
         $playlists = $this->playlistRepository->findByContainValue($champ, $valeur, $table);
         $categories = $this->categorieRepository->findAll();
-        return $this->render("pages/playlists.html.twig", [
+        return $this->render(self::BASE_PATH . self::TEMPLATE_PLAYLISTS, [
             'playlists' => $playlists,
             'categories' => $categories,            
             'valeur' => $valeur,
@@ -88,11 +95,11 @@ class PlaylistsController extends AbstractController {
         $playlist = $this->playlistRepository->find($id);
         $playlistCategories = $this->categorieRepository->findAllForOnePlaylist($id);
         $playlistFormations = $this->formationRepository->findAllForOnePlaylist($id);
-        return $this->render("pages/playlist.html.twig", [
+        return $this->render(self::BASE_PATH . "playlist.html.twig", [
             'playlist' => $playlist,
             'playlistcategories' => $playlistCategories,
             'playlistformations' => $playlistFormations
         ]);        
-    }       
+    }        
     
 }
