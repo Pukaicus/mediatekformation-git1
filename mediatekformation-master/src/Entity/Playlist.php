@@ -8,6 +8,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * Entité représentant une playlist regroupant plusieurs formations
+ */
 #[ORM\Entity(repositoryClass: PlaylistRepository::class)]
 class Playlist
 {

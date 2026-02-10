@@ -1,0 +1,52 @@
+{# empty Twig template #}
+{% extends "basefront.html.twig" %}
+{% block body %}
+    <div class="row mt-4 mb-2">
+        <div class="col">
+            <h2 class="text-info">Gestion des playlists</h2>
+        </div>
+        <div class="col text-right">
+            <a href="{{ path('admin.playlist.ajout') }}" class="btn btn-primary">Ajouter une playlist</a>
+        </div>
+    </div>
+
+    {# Affichage des messages flash (succès ou erreur de suppression) #}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Playlist
+                    <a href="{{ path('admin.playlists.sort', {champ:'name', ordre:'ASC'}) }}" class="btn btn-info btn-sm"><</a>
+                    <a href="{{ path('admin.playlists.sort', {champ:'name', ordre:'DESC'}) }}" class="btn btn-info btn-sm">></a>
+                </th>
+                <th scope="col">Nombre de formations
+                    {# Le tri par nombre de formations sera géré dans le repository plus tard #}
+                </th>
+                <th scope="col" class="text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for playlist in playlists %}
+                <tr>
+                    <td>{{ playlist.name }}</td>
+                    <td>{{ playlist.formations|length }}</td>
+                    <td class="text-center">
+                        <a href="{{ path('admin.playlist.edit', {id:playlist.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                        <a href="{{ path('admin.playlist.suppr', {id:playlist.id}) }}" 
+                           class="btn btn-danger btn-sm" 
+                           onclick="return confirm('Supprimer la playlist : {{ playlist.name }} ?')">
+                           Supprimer
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

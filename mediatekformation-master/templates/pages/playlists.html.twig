@@ -16,7 +16,6 @@
                         </div>
                     </form>                     
                 </th>
-                {# NOUVELLE COLONNE : Nombre de formations et tris #}
                 <th class="text-left align-top" scope="col">
                     nombre de formations<br />
                     <a href="{{ path('playlists.sort', {champ:'formations', ordre:'ASC'}) }}" class="btn btn-info btn-sm active" role="button"><</a>
@@ -52,7 +51,6 @@
                                 {{ playlists[k].name }}
                             </h5>
                         </td>
-                        {# AFFICHAGE DU NOMBRE DE FORMATIONS #}
                         <td>
                             {{ playlists[k].formations|length }}
                         </td>                 

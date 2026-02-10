@@ -1,0 +1,35 @@
+{# empty Twig template #}
+{% extends "basefront.html.twig" %}
+{% block body %}
+    <div class="mt-4">
+        <h2 class="text-info">Gestion d'une playlist</h2>
+        
+        {{ form_start(form) }}
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_row(form.name) }}
+                    {{ form_row(form.description) }}
+                    <div class="mt-2">
+                        {{ form_widget(form.submit, {'attr': {'class': 'btn btn-primary'}}) }}
+                        <a href="{{ path('admin.playlists') }}" class="btn btn-secondary">Annuler</a>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    {# Si on est en mode édition (playlist a un ID), on liste les formations #}
+                    {% if playlist.id %}
+                        <h4>Formations rattachées</h4>
+                        <ul class="list-group">
+                            {% for formation in playlist.formations %}
+                                <li class="list-group-item">{{ formation.title }}</li>
+                            {% else %}
+                                <li class="list-group-item">Aucune formation rattachée</li>
+                            {% endfor %}
+                        </ul>
+                        <p class="text-muted small mt-2">Note : Le rattachement se gère depuis le formulaire de formation.</p>
+                    {% endif %}
+                </div>
+            </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

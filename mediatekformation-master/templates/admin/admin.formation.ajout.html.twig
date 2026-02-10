@@ -1,0 +1,26 @@
+{% extends "basefront.html.twig" %}
+{% block body %}
+    <div class="mt-4">
+        <h2 class="text-info">Gestion d'une formation</h2>
+        
+        {{ form_start(form) }}
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_row(form.title) }}
+                    {{ form_row(form.publishedAt) }}
+                    {{ form_row(form.playlist) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.categories) }}
+                    {{ form_row(form.description) }}
+                </div>
+            </div>
+            
+            <div class="mt-2">
+                {# Utilisation du widget pour appliquer le style Bootstrap au bouton submit #}
+                {{ form_widget(form.submit, {'attr': {'class': 'btn btn-primary'}}) }}
+                <a href="{{ path('admin.formations') }}" class="btn btn-secondary">Annuler</a>
+            </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

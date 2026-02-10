@@ -1,0 +1,57 @@
+{% extends "basefront.html.twig" %}
+{% block body %}
+    <div class="row mt-4 mb-2">
+        <div class="col">
+            <h2 class="text-info">Gestion des formations</h2>
+        </div>
+        <div class="col text-right">
+            {# LIEN CORRIGÉ : Pointer vers la méthode d'ajout #}
+            <a href="{{ path('admin.formation.ajout') }}" class="btn btn-primary">Ajouter une formation</a>
+        </div>
+    </div>
+
+    <table class="table table-striped" summary="Liste des formations pour administration">
+        <thead>
+            <tr>
+                <th scope="col">Formation
+                    <a href="{{ path('admin.formations.sort', {champ:'title', ordre:'ASC'}) }}" class="btn btn-info btn-sm"><</a>
+                    <a href="{{ path('admin.formations.sort', {champ:'title', ordre:'DESC'}) }}" class="btn btn-info btn-sm">></a>
+                </th>
+                <th scope="col">Playlist
+                    <a href="{{ path('admin.formations.sort', {champ:'name', ordre:'ASC', table:'playlist'}) }}" class="btn btn-info btn-sm"><</a>
+                    <a href="{{ path('admin.formations.sort', {champ:'name', ordre:'DESC', table:'playlist'}) }}" class="btn btn-info btn-sm">></a>
+                </th>
+                <th scope="col">Catégories</th>
+                <th scope="col">Date
+                    <a href="{{ path('admin.formations.sort', {champ:'publishedAt', ordre:'ASC'}) }}" class="btn btn-info btn-sm"><</a>
+                    <a href="{{ path('admin.formations.sort', {champ:'publishedAt', ordre:'DESC'}) }}" class="btn btn-info btn-sm">></a>
+                </th>
+                <th scope="col" class="text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for formation in formations %}
+                <tr>
+                    <td>{{ formation.title }}</td>
+                    <td>{{ formation.playlist.name }}</td>
+                    <td>
+                        {% for categorie in formation.categories %}
+                            <span class="badge badge-secondary">{{ categorie.name }}</span>
+                        {% endfor %}
+                    </td>
+                    <td>{{ formation.publishedAtString }}</td>
+                    <td class="text-center">
+                        {# LIEN CORRIGÉ : Utiliser la route edit avec l'id de la formation #}
+                        <a href="{{ path('admin.formation.edit', {id:formation.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                        
+                        <a href="{{ path('admin.formation.suppr', {id:formation.id}) }}" 
+                           class="btn btn-danger btn-sm" 
+                           onclick="return confirm('Supprimer la formation : {{ formation.title }} ?')">
+                           Supprimer
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -7,22 +7,23 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * Entité représentant une formation vidéo
+ */
 #[ORM\Entity(repositoryClass: FormationRepository::class)]
 class Formation
 {
-
-    /**
-     * Début de chemin vers les images
-     */
     private const cheminImage = "https://i.ytimg.com/vi/";
-        
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Assert\LessThanOrEqual("today")]
     private ?\DateTimeInterface $publishedAt = null;
 
     #[ORM\Column(length: 100, nullable: true)]
@@ -34,7 +35,7 @@ class Formation
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $videoId = null;
 
-    #[ORM\ManyToOne(inversedBy: 'formations')]
+    #[ORM\ManyToOne(targetEntity: Playlist::class, inversedBy: 'formations')]
     private ?Playlist $playlist = null;
 
     /**
@@ -65,8 +66,13 @@ class Formation
         return $this;
     }
 
-    public function getPublishedAtString(): string {
-        if($this->publishedAt == null){
+    /**
+     * Retourne la date de parution sous forme de chaîne formatée (jj/mm/aaaa)
+     * @return string
+     */
+    public function getPublishedAtString(): string 
+    {
+        if ($this->publishedAt == null) {
             return "";
         }
         return $this->publishedAt->format('d/m/Y');     
@@ -108,17 +114,25 @@ class Formation
         return $this;
     }
 
+    /**
+     * Retourne l'URL de la miniature de la vidéo YouTube (format par défaut)
+     * @return string|null
+     */
     public function getMiniature(): ?string
     {
         return self::cheminImage.$this->videoId."/default.jpg";
     }
 
+    /**
+     * Retourne l'URL de l'image haute qualité de la vidéo YouTube
+     * @return string|null
+     */
     public function getPicture(): ?string
     {
         return self::cheminImage.$this->videoId."/hqdefault.jpg";
     }
     
-    public function getPlaylist(): ?playlist
+    public function getPlaylist(): ?Playlist
     {
         return $this->playlist;
     }

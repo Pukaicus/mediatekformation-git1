@@ -1,0 +1,46 @@
+{# empty Twig template #}
+{% extends "basefront.html.twig" %}
+{% block body %}
+    <div class="mt-4 mb-2">
+        <h2 class="text-info">Gestion des catégories</h2>
+    </div>
+
+    {# Formulaire d'ajout rapide #}
+    <div class="row mb-4">
+        <div class="col">
+            <form method="POST" action="{{ path('admin.categories') }}" class="form-inline">
+                <input type="text" name="nom" class="form-control mr-2" placeholder="Nom de la catégorie" required>
+                <button type="submit" class="btn btn-primary">Ajouter</button>
+            </form>
+        </div>
+    </div>
+
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">{{ message }}</div>
+        {% endfor %}
+    {% endfor %}
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Catégorie</th>
+                <th scope="col" class="text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for categorie in categories %}
+                <tr>
+                    <td>{{ categorie.name }}</td>
+                    <td class="text-center">
+                        <a href="{{ path('admin.categorie.suppr', {id:categorie.id}) }}" 
+                           class="btn btn-danger btn-sm" 
+                           onclick="return confirm('Supprimer la catégorie : {{ categorie.name }} ?')">
+                           Supprimer
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
